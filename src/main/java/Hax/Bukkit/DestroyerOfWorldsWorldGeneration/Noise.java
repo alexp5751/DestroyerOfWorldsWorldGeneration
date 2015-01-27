@@ -1,4 +1,4 @@
-package Hax.Bukkit.DestroyerOfWorlds;
+package Hax.Bukkit.DestroyerOfWorldsWorldGeneration;
 
 import java.util.Random;
 

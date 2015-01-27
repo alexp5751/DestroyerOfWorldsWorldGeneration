@@ -1,11 +1,11 @@
-package Hax.Bukkit.DestroyerOfWorlds;
+package Hax.Bukkit.DestroyerOfWorldsWorldGeneration;
  
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.java.JavaPlugin;
  
-public final class DestroyerOfWorlds extends JavaPlugin {
+public final class DestroyerOfWorldsWorldGeneration extends JavaPlugin {
     @Override
     public void onEnable() {
         getLogger().info("onEnable has been invoked!");

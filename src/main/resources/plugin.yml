@@ -1,4 +1,4 @@
-name: DestroyerOfWorlds
-main: Hax.Bukkit.DestroyerOfWorlds.DestroyerOfWorlds
+name: DestroyerOfWorldsWorldGeneration
+main: Hax.Bukkit.DestroyerOfWorldsWorldGeneration.DestroyerOfWorldsWorldGeneration
 version: 1.0
 load: STARTUP
