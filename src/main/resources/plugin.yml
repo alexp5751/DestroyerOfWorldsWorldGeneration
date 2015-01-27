@@ -1,3 +1,4 @@
 name: DestroyerOfWorlds
 main: Hax.Bukkit.DestroyerOfWorlds.DestroyerOfWorlds
 version: 1.0
+load: STARTUP

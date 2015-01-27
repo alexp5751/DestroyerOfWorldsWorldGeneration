@@ -2,6 +2,7 @@ package Hax.Bukkit.DestroyerOfWorlds;
  
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.java.JavaPlugin;
  
 public final class DestroyerOfWorlds extends JavaPlugin {
@@ -13,6 +14,11 @@ public final class DestroyerOfWorlds extends JavaPlugin {
     @Override
     public void onDisable() {
         getLogger().info("onDisable has been invoked!");
+    }
+    
+    @Override
+    public ChunkGenerator getDefaultWorldGenerator(String worldName, String id) {
+		return new DestroyerWorldGenerator(this);
     }
     
     @Override
