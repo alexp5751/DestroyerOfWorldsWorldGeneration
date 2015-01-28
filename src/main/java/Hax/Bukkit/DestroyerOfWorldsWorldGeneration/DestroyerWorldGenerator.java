@@ -4,18 +4,28 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
+import org.bukkit.FireworkEffect.Type;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Firework;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.generator.BlockPopulator;
 import org.bukkit.generator.ChunkGenerator;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class DestroyerWorldGenerator extends ChunkGenerator {
+public class DestroyerWorldGenerator extends ChunkGenerator implements Listener {
 	
 	private JavaPlugin plugin;
-	private final int NUM_X_CHUNKS = 16;
-	private final int NUM_Z_CHUNKS = 16;
+	private final int NUM_X_CHUNKS = 8;
+	private final int NUM_Z_CHUNKS = 8;
 	private int[][] heightMap;
 	
 	public DestroyerWorldGenerator(JavaPlugin plugin) {
@@ -43,7 +53,7 @@ public class DestroyerWorldGenerator extends ChunkGenerator {
 	
 	@Override
 	public boolean canSpawn(World world, int x, int z) {
-        return true;
+        return false;
     }
 	
 	@Override
@@ -53,8 +63,29 @@ public class DestroyerWorldGenerator extends ChunkGenerator {
 	
 	@Override
 	public Location getFixedSpawnLocation(World world, Random random) {
-        return new Location(world, 0, 0, 0);
+        return getRandomLocation(world);
     }
+	
+	@SuppressWarnings("deprecation")
+	@EventHandler
+	public void onWorldLoad(WorldLoadEvent event) {
+		final WorldLoadEvent loadEvent = event;
+		plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
+			@Override
+			public void run() {
+				Location spot = getRandomLocation(loadEvent.getWorld());
+				spot.setY(spot.getY() + 3);
+				loadEvent.getWorld().dropItem(spot, new ItemStack(Material.SAND));
+				Firework fw = (Firework) loadEvent.getWorld().spawnEntity(spot, EntityType.FIREWORK);
+				FireworkMeta fwm = fw.getFireworkMeta();
+				FireworkEffect effect = FireworkEffect.builder().withColor(Color.PURPLE).with(Type.BURST).build();
+				fwm.addEffect(effect);
+				fwm.setPower(0);
+				fw.setFireworkMeta(fwm);
+				plugin.getServer().broadcastMessage("Spawned new weapon!");
+			}
+		}, 200, 50);
+	}
 	
     private int byteFormat(int x, int y, int z) {
     	return (x * 16 + z) * 128 + y;
@@ -71,5 +102,11 @@ public class DestroyerWorldGenerator extends ChunkGenerator {
     		}
     	}
     	return heightMap;
+    }
+    
+    private Location getRandomLocation(World world) {
+    	int x = (int) (Math.random() * 16 * NUM_X_CHUNKS);
+        int z = (int) (Math.random() * 16 * NUM_Z_CHUNKS);
+        return new Location(world, x, heightMap[x][z], z);
     }
 }
